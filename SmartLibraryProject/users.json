@@ -1,14 +1,20 @@
 [
     {
-        "kullanici_no": 1,
         "ad": "admin",
-        "sifre": "admin123",
-        "rol": "admin"
+        "kullanici_no": 1,
+        "rol": "admin",
+        "sifre": "admin123"
     },
     {
-        "kullanici_no": 2,
         "ad": "user",
-        "sifre": "user123",
-        "rol": "user"
+        "kullanici_no": 2,
+        "rol": "user",
+        "sifre": "user123"
+    },
+    {
+        "ad": "zekikurt",
+        "kullanici_no": 3,
+        "rol": "normal",
+        "sifre": "9602"
     }
 ]

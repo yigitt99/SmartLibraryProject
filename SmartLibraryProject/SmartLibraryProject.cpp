@@ -54,6 +54,8 @@ void borrowBookJson();
 void verifyIsbn();
 void returnBook();
 void normalMenu(bool isAdmin);
+void kisiEkle();
+void kisiSil();
 
 
 // JSON dosyasını okuyup kitapları vektöre atan fonksiyon
@@ -283,6 +285,158 @@ void kitapSil() {
 }
 
 
+
+// Kullanıcı ekleme fonksiyonu
+void kisiEkle() {
+    clear();
+    cout << "\n\t\t\t\t\t-----------------------------------";
+    cout << "\n\t\t\t\t\t|         K I S I   E K L E       |";
+    cout << "\n\t\t\t\t\t-----------------------------------";
+
+    vector<Kullanici> kullanicilar = loadUsersFromJson("users.json");
+    Kullanici yeniKullanici;
+
+    // Kullanıcı No kontrol döngüsü
+    bool numaraKullaniliyor;
+    do {
+        numaraKullaniliyor = false;
+
+        cout << "\n\n\tKullanici No: ";
+        while (!(cin >> yeniKullanici.kullanici_no)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "\n\tHatali giris! Lutfen sayi girin: ";
+        }
+
+        // Aynı numarayı kontrol et
+        for (const auto& kullanici : kullanicilar) {
+            if (kullanici.kullanici_no == yeniKullanici.kullanici_no) {
+                cout << "\n\t\033[31mBu kullanici no zaten kullaniliyor! Farkli bir no girin.\033[0m";
+                numaraKullaniliyor = true;
+                break;
+            }
+        }
+    } while (numaraKullaniliyor);
+
+    cin.ignore(); // Buffer temizleme
+
+    cout << "\n\tKullanici Adi: ";
+    getline(cin, yeniKullanici.ad);
+
+    cout << "\n\tSifre: ";
+    getline(cin, yeniKullanici.sifre);
+
+    // Rol seçimi
+    int rolSecim;
+    cout << "\n\tRol (1: Admin, 2: Normal Kullanici): ";
+    while (!(cin >> rolSecim) || (rolSecim != 1 && rolSecim != 2)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "\n\tHatali giris! Lutfen 1 veya 2 girin: ";
+    }
+    yeniKullanici.rol = (rolSecim == 1) ? "admin" : "normal";
+
+    // JSON işlemleri
+    json j;
+    ifstream inFile("users.json");
+    if (inFile.is_open()) {
+        inFile >> j;
+        inFile.close();
+    }
+
+    j.push_back({
+        {"kullanici_no", yeniKullanici.kullanici_no},
+        {"ad", yeniKullanici.ad},
+        {"sifre", yeniKullanici.sifre},
+        {"rol", yeniKullanici.rol}
+        });
+
+    ofstream outFile("users.json");
+    if (outFile.is_open()) {
+        outFile << setw(4) << j;
+        outFile.close();
+        cout << "\n\t\033[32mKullanici basariyla eklendi!\033[0m";
+    }
+    else {
+        cerr << "\n\t\033[31mDosya acilamadi: users.json\033[0m";
+    }
+}
+
+
+void kisiSil() {
+    clear();
+    cout << "\n\t\t\t\t\t-----------------------------------";
+    cout << "\n\t\t\t\t\t|         K I S I   S I L         |";
+    cout << "\n\t\t\t\t\t-----------------------------------";
+
+    // Kullanıcıları yükle
+    vector<Kullanici> kullanicilar = loadUsersFromJson("users.json");
+    if (kullanicilar.empty()) {
+        cout << "\n\t\033[33mKullanici listesi bos!\033[0m";
+        return;
+    }
+
+    // Mevcut kullanıcıları listele
+    cout << "\n\tMevcut Kullanicilar:\n";
+    for (const auto& k : kullanicilar) {
+        cout << "\n\t" << k.kullanici_no << " | " << k.ad
+            << " (" << k.rol << ")";
+    }
+
+    // Silinecek kullanıcı no al
+    int silinecekNo;
+    cout << "\n\n\tSilinecek kullanici no (0: Iptal): ";
+    while (!(cin >> silinecekNo)) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "\n\tHatali giris! Lutfen sayi girin: ";
+    }
+
+    if (silinecekNo == 0) {
+        cout << "\n\t\033[33mIslem iptal edildi.\033[0m";
+        return;
+    }
+
+    // Kullanıcıyı bul ve sil
+    bool bulundu = false;
+    for (auto it = kullanicilar.begin(); it != kullanicilar.end(); ++it) {
+        if (it->kullanici_no == silinecekNo) {
+            // Admin kendini silmesin (opsiyonel)
+            if (it->rol == "admin" && it->ad == "admin") {
+                cout << "\n\t\033[31mAna admin silinemez!\033[0m";
+                return;
+            }
+            kullanicilar.erase(it);
+            bulundu = true;
+            break;
+        }
+    }
+
+    // JSON'a kaydet
+    if (bulundu) {
+        json j;
+        for (const auto& k : kullanicilar) {
+            j.push_back({
+                {"kullanici_no", k.kullanici_no},
+                {"ad", k.ad},
+                {"sifre", k.sifre},
+                {"rol", k.rol}
+                });
+        }
+
+        ofstream outFile("users.json");
+        if (outFile.is_open()) {
+            outFile << setw(4) << j;
+            cout << "\n\t\033[32mKullanici basariyla silindi!\033[0m";
+        }
+        else {
+            cerr << "\n\t\033[31mDosya acilamadi!\033[0m";
+        }
+    }
+    else {
+        cout << "\n\t\033[31mKullanici bulunamadi!\033[0m";
+    }
+}
 // Admin menüsü
 void adminMenu() {
     int choice;
@@ -293,9 +447,10 @@ void adminMenu() {
         cout << "\n\t\t\t\t\t-----------------------------------";
         cout << "\n\n\t1. Kitap Ekle";
         cout << "\n\t2. Kitap Sil";
-        cout << "\n\t3. Odunc Listele";
-        cout << "\n\t4. Ana Menuye Don";
-        cout << "\n\n\tLutfen 1 ile 4 arasinda bir secim yapiniz: ";
+        cout << "\n\t3. Kisi Ekle";
+        cout << "\n\t4. Kisi Sil";
+        cout << "\n\t5. Ana Menuye Don";
+        cout << "\n\n\tLutfen 1 ile 5 arasinda bir secim yapiniz: ";
         cin >> choice;
 
         switch (choice) {
@@ -306,9 +461,12 @@ void adminMenu() {
             kitapSil();
             break;
         case 3:
-            // Odunc listesi gösterme fonksiyonu burada çağır
+            kisiEkle();
             break;
         case 4:
+            kisiSil();
+            break;
+        case 5:
             return;
         default:
             cout << "\n\tGecersiz secim, tekrar deneyin.\n";
