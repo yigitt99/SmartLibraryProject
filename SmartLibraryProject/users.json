@@ -1,1 +1,14 @@
-[]
+[
+    {
+        "kullanici_no": 1,
+        "ad": "admin",
+        "sifre": "admin123",
+        "rol": "admin"
+    },
+    {
+        "kullanici_no": 2,
+        "ad": "user",
+        "sifre": "user123",
+        "rol": "user"
+    }
+]

@@ -1,1 +1,62 @@
-[]
+[
+    {
+        "baslik": "C++ ile Nesne Yönelimli Programlama",
+        "isbn": "978-605-09-4567-8",
+        "kitap_no": 1,
+        "yazar": "Bjarne Stroustrup"
+    },
+    {
+        "baslik": "Clean Code",
+        "isbn": "978-605-09-1234-5",
+        "kitap_no": 2,
+        "yazar": "Robert C. Martin"
+    },
+    {
+        "baslik": "Design Patterns",
+        "isbn": "978-605-09-7890-1",
+        "kitap_no": 3,
+        "yazar": "Erich Gamma"
+    },
+    {
+        "baslik": "Algoritmalar",
+        "isbn": "978-605-09-3456-2",
+        "kitap_no": 4,
+        "yazar": "Thomas H. Cormen"
+    },
+    {
+        "baslik": "The Pragmatic Programmer",
+        "isbn": "978-605-09-6789-3",
+        "kitap_no": 5,
+        "yazar": "Andrew Hunt"
+    },
+    {
+        "baslik": "Introduction to Algorithms",
+        "isbn": "978-0262033848",
+        "kitap_no": 6,
+        "yazar": "Thomas H. Cormen"
+    },
+    {
+        "baslik": "Refactoring: Improving the Design of Existing Code",
+        "isbn": "978-0201485677",
+        "kitap_no": 7,
+        "yazar": "Martin Fowler"
+    },
+    {
+        "baslik": "Code Complete",
+        "isbn": "978-0735619678",
+        "kitap_no": 8,
+        "yazar": "Steve McConnell"
+    },
+    {
+        "baslik": "The Mythical Man-Month",
+        "isbn": "978-0201835953",
+        "kitap_no": 9,
+        "yazar": "Frederick P. Brooks Jr."
+    },
+    {
+        "baslik": "Clean Architecture",
+        "isbn": "978-0134494166",
+        "kitap_no": 10,
+        "yazar": "Robert C. Martin"
+    }
+]
